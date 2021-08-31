@@ -51,7 +51,7 @@ def main():
     while True:
         show_grid(grid)
         grid = grid_iter(grid)
-        time.sleep(1/600)
+        time.sleep(.1/6)
 
 
 try: 

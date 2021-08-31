@@ -8,6 +8,7 @@
 # Based on Rosetta Code Python Forest Fire example.
 # https://rosettacode.org/wiki/Forest_fire#Python
 
+from random import randint
 import random
 import time
 
@@ -36,9 +37,12 @@ p = 0.0001
 f = 0.0005
 
 # Brightness values for a tree, fire, and blank space
-life = [100, 0, 0]
-burning = [255, 0, 0]
-space = [10, 10, 10]
+#life = [0, 0, 255]
+#burning = [255, 0, 0]
+#space = [255, 255, 255]
+#life = [randint(128,255), randint(128,255), randint(128,255)]
+#burning = [randint(0,255), randint(0,255), randint(0,255)]
+#space = [randint(0,128), randint(0,128), randint(0,128)]
 
 # Each square's neighbour coordinates
 hood = ((-1, -1), (-1, 0), (-1, 1),
@@ -48,6 +52,12 @@ hood = ((-1, -1), (-1, 0), (-1, 1),
 
 # Function to populate the initial forest
 def initialise():
+    global life
+    global burning
+    global space
+    life = [randint(128,255), randint(128,255), randint(128,255)]
+    burning = [randint(0,255), randint(0,255), randint(0,255)]
+    space = [randint(0,128), randint(0,128), randint(0,128)]
     grid = {(x, y): (life if random.random() <= initial_life else space) for x in range(width) for y in range(height)}
     return grid
 
@@ -109,7 +119,7 @@ def main():
             print("limit reached")
             cycles = 0
             grid = initialise()
-        time.sleep(1 / 6.0)
+        time.sleep(1 / 8.0)
 
 
 # Catches control-c and exits cleanly
