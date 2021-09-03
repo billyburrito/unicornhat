@@ -1,14 +1,9 @@
 #!/usr/bin/env python3
 
-# Forest fire model cellular automaton. Simulates the growth
-# of trees in a forest, with sporadic outbreaks of forest fires.
-
-# https://en.wikipedia.org/wiki/Forest-fire_model
-
-# Based on Rosetta Code Python Forest Fire example.
-# https://rosettacode.org/wiki/Forest_fire#Python
+# modified from forest fire demo code
 
 from random import randint
+from gpiozero import Button
 import random
 import time
 
@@ -16,7 +11,6 @@ from unicornhatmini import UnicornHATMini
 
 print("""
 Unicorn HAT Mini: The game of life
-
 Press Ctrl+C to exit!
 """)
 
@@ -36,27 +30,28 @@ initial_life = 0.15
 p = 0.0001
 f = 0.0005
 
-# Brightness values for a tree, fire, and blank space
-#life = [0, 0, 255]
-#burning = [255, 0, 0]
-#space = [255, 255, 255]
-#life = [randint(128,255), randint(128,255), randint(128,255)]
-#burning = [randint(0,255), randint(0,255), randint(0,255)]
-#space = [randint(0,128), randint(0,128), randint(0,128)]
-
 # Each square's neighbour coordinates
 hood = ((-1, -1), (-1, 0), (-1, 1),
         (0, -1), (0, 1),
         (1, -1), (1, 0), (1, 1))
 
+# button stub
+button_map = {5: "A",
+              6: "B",
+              16: "X",
+              24: "Y"}
+
+button_a = Button(5)
+button_b = Button(6)
+button_x = Button(16)
+button_y = Button(24)
+
 
 # Function to populate the initial forest
 def initialise():
     global life
-    global burning
     global space
     life = [randint(128,255), randint(128,255), randint(128,255)]
-    burning = [randint(0,255), randint(0,255), randint(0,255)]
     space = [randint(0,128), randint(0,128), randint(0,128)]
     grid = {(x, y): (life if random.random() <= initial_life else space) for x in range(width) for y in range(height)}
     return grid
@@ -117,6 +112,10 @@ def main():
             cycles += 1
         if (cycles > 500):
             print("limit reached")
+            cycles = 0
+            grid = initialise()
+        if (button_a.is_pressed or button_b.is_pressed or button_x.is_pressed or button_y.is_pressed):
+            print("button pressed")
             cycles = 0
             grid = initialise()
         time.sleep(1 / 8.0)
